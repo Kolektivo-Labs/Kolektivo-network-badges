@@ -11,6 +11,9 @@ contract KolektivoNetworkBadges is ERC1155, Ownable {
     uint256 public maxBadgeLevel = 0;
     uint256[] public pointsPerTier;
 
+    // Mapping to track the highest level minted by each user
+    mapping(address => uint256) private _lastMintedLevel;
+
     constructor(
         address initialOwner,
         IERC20 kolektivoNetworkPoints,
@@ -36,7 +39,12 @@ contract KolektivoNetworkBadges is ERC1155, Ownable {
             _kolektivoNetworkPoints.balanceOf(account) >= pointsPerTier[id - 1],
             "Insufficient points for this badge level"
         );
+        require(
+            _lastMintedLevel[account] + 1 == id,
+            "Levels must be minted sequentially"
+        );
         _mint(account, id, amount, data);
+        _lastMintedLevel[account] = id;
     }
 
     function setPointsRequired(
@@ -71,6 +79,12 @@ contract KolektivoNetworkBadges is ERC1155, Ownable {
     function getPointsRequired(uint256 level) external view returns (uint256) {
         require(level > 0 && level <= maxBadgeLevel, "Invalid badge level");
         return pointsPerTier[level - 1];
+    }
+
+    function getLastMintedLevel(
+        address account
+    ) external view returns (uint256) {
+        return _lastMintedLevel[account];
     }
 
     function _setInitialPointsPerTier(
