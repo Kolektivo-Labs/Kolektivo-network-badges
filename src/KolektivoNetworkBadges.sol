@@ -7,21 +7,21 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract KolektivoNetworkBadges is ERC1155, Ownable {
-    IERC20 private _kolektivoNetworkPoints;
+    IERC20 private _kolektivoNetworkStamps;
     uint256 public maxBadgeLevel = 0;
-    uint256[] public pointsPerTier;
+    uint256[] public stampsPerTier;
 
     // Mapping to track the highest level minted by each user
     mapping(address => uint256) private _lastMintedLevel;
 
     constructor(
         address initialOwner,
-        IERC20 kolektivoNetworkPoints,
-        uint256[] memory initialPointsPerTier
+        IERC20 kolektivoNetworkStamps,
+        uint256[] memory initialStampsPerTier
     ) ERC1155("") Ownable(initialOwner) {
         _setURI("https://kolektivo.network/badges/{id}.json");
-        _kolektivoNetworkPoints = kolektivoNetworkPoints;
-        _setInitialPointsPerTier(initialPointsPerTier);
+        _kolektivoNetworkStamps = kolektivoNetworkStamps;
+        _setInitialStampsPerTier(initialStampsPerTier);
     }
 
     function setURI(string memory newuri) public onlyOwner {
@@ -36,8 +36,8 @@ contract KolektivoNetworkBadges is ERC1155, Ownable {
     ) public {
         require(id > 0 && id <= maxBadgeLevel, "Invalid badge level");
         require(
-            _kolektivoNetworkPoints.balanceOf(account) >= pointsPerTier[id - 1],
-            "Insufficient points for this badge level"
+            _kolektivoNetworkStamps.balanceOf(account) >= stampsPerTier[id - 1],
+            "Insufficient stamps for this badge level"
         );
         require(
             _lastMintedLevel[account] + 1 == id,
@@ -47,9 +47,9 @@ contract KolektivoNetworkBadges is ERC1155, Ownable {
         _lastMintedLevel[account] = id;
     }
 
-    function setPointsRequired(
+    function setStampsRequired(
         uint256 level,
-        uint256 points
+        uint256 stamps
     ) external onlyOwner {
         require(
             level <= maxBadgeLevel + 1,
@@ -57,28 +57,28 @@ contract KolektivoNetworkBadges is ERC1155, Ownable {
         );
         if (level > 1) {
             require(
-                points > pointsPerTier[level - 2],
-                "Points must be in ascending order"
+                stamps > stampsPerTier[level - 2],
+                "Stamps must be in ascending order"
             );
         }
-        if (level <= maxBadgeLevel && level < pointsPerTier.length) {
+        if (level <= maxBadgeLevel && level < stampsPerTier.length) {
             require(
-                points < pointsPerTier[level],
-                "Points must be in ascending order"
+                stamps < stampsPerTier[level],
+                "Stamps must be in ascending order"
             );
         }
 
         if (level > maxBadgeLevel) {
-            pointsPerTier.push(points);
+            stampsPerTier.push(stamps);
             maxBadgeLevel = level;
         } else {
-            pointsPerTier[level - 1] = points;
+            stampsPerTier[level - 1] = stamps;
         }
     }
 
-    function getPointsRequired(uint256 level) external view returns (uint256) {
+    function getStampsRequired(uint256 level) external view returns (uint256) {
         require(level > 0 && level <= maxBadgeLevel, "Invalid badge level");
-        return pointsPerTier[level - 1];
+        return stampsPerTier[level - 1];
     }
 
     function getLastMintedLevel(
@@ -87,18 +87,18 @@ contract KolektivoNetworkBadges is ERC1155, Ownable {
         return _lastMintedLevel[account];
     }
 
-    function _setInitialPointsPerTier(
-        uint256[] memory initialPointsPerTier
+    function _setInitialStampsPerTier(
+        uint256[] memory initialStampsPerTier
     ) internal {
         uint256 tail = 0;
-        for (uint256 i = 0; i < initialPointsPerTier.length; i++) {
+        for (uint256 i = 0; i < initialStampsPerTier.length; i++) {
             require(
-                tail < initialPointsPerTier[i],
-                "Points must be in ascending order"
+                tail < initialStampsPerTier[i],
+                "Stamps must be in ascending order"
             );
-            pointsPerTier.push(initialPointsPerTier[i]);
-            tail = initialPointsPerTier[i];
+            stampsPerTier.push(initialStampsPerTier[i]);
+            tail = initialStampsPerTier[i];
         }
-        maxBadgeLevel = initialPointsPerTier.length;
+        maxBadgeLevel = initialStampsPerTier.length;
     }
 }
