@@ -129,21 +129,21 @@ contract KolektivoE2ETest is Test {
         // Mint level 1 badge and check URI
         vm.prank(user);
         badges.mint(user, 1, 1, "");
-        string memory expectedURI1 = "https://kolektivo.network/badges/1.json";
+        string memory expectedURI1 = "https://kolektivo.network/badges/0000000000000000000000000000000000000000000000000000000000000001.json";
         string memory actualURI1 = badges.uri(1);
         assertEq(actualURI1, expectedURI1);
 
         // Mint level 2 badge and check URI
         vm.prank(user);
         badges.mint(user, 2, 1, "");
-        string memory expectedURI2 = "https://kolektivo.network/badges/2.json";
+        string memory expectedURI2 = "https://kolektivo.network/badges/0000000000000000000000000000000000000000000000000000000000000002.json";
         string memory actualURI2 = badges.uri(2);
         assertEq(actualURI2, expectedURI2);
 
         // Mint level 3 badge and check URI
         vm.prank(user);
         badges.mint(user, 3, 1, "");
-        string memory expectedURI3 = "https://kolektivo.network/badges/3.json";
+        string memory expectedURI3 = "https://kolektivo.network/badges/0000000000000000000000000000000000000000000000000000000000000003.json";
         string memory actualURI3 = badges.uri(3);
         assertEq(actualURI3, expectedURI3);
     }

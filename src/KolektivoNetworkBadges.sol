@@ -69,7 +69,10 @@ contract KolektivoNetworkBadges is ERC1155URIStorage, Ownable {
 
         if (level > maxBadgeLevel) {
             stampsPerTier.push(stamps);
-            _setURI(level, string(abi.encodePacked(Strings.toString(level), ".json")));
+            _setURI(
+                level,
+                string(abi.encodePacked(_toPaddedHexString(level), ".json"))
+            );
             maxBadgeLevel = level;
         } else {
             stampsPerTier[level - 1] = stamps;
@@ -97,9 +100,22 @@ contract KolektivoNetworkBadges is ERC1155URIStorage, Ownable {
                 "Stamps must be in ascending order"
             );
             stampsPerTier.push(initialStampsPerTier[i]);
-            _setURI(i + 1, string(abi.encodePacked(Strings.toString(i + 1), ".json")));
+            _setURI(
+                i + 1,
+                string(abi.encodePacked(_toPaddedHexString(i + 1), ".json"))
+            );
             tail = initialStampsPerTier[i];
         }
         maxBadgeLevel = initialStampsPerTier.length;
+    }
+    function _toPaddedHexString(
+        uint256 value
+    ) internal pure returns (string memory) {
+        bytes memory buffer = new bytes(64);
+        for (uint256 i = 64; i > 0; --i) {
+            buffer[i - 1] = bytes1(uint8(48 + uint256(value & 0xf)));
+            value >>= 4;
+        }
+        return string(buffer);
     }
 }
