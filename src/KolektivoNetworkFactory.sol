@@ -11,12 +11,25 @@ contract KolektivoNetworkFactory is Ownable {
     address[] public badgesContracts;
     address[] public stampsContracts;
 
+    /**
+     * @dev Creates a new Kolektivo Network Campaign with the specified parameters.
+     * @param stampName Name of the stamp token.
+     * @param stampSymbol Symbol of the stamp token.
+     * @param initialStampsPerTier Initial supply of stamps per tier.
+     * @param uri Metadata URI for the badges.
+     * @return stampsContract Address of the created stamps contract.
+     * @return badgesContract Address of the created badges contract.
+     */
     function createKolektivoNetworkCampaign(
         string memory stampName,
         string memory stampSymbol,
         uint256[] calldata initialStampsPerTier,
         string calldata uri
-    ) public onlyOwner returns (address stampsContract, address badgesContract ) {
+    )
+        public
+        onlyOwner
+        returns (address stampsContract, address badgesContract)
+    {
         KolektivoNetworkStamps stamps = new KolektivoNetworkStamps(
             msg.sender,
             stampName,
@@ -31,15 +44,21 @@ contract KolektivoNetworkFactory is Ownable {
         stampsContracts.push(address(stamps));
         badgesContracts.push(address(badges));
 
-        return (address(stamps),address(badges) );
+        return (address(stamps), address(badges));
     }
 
-    function createKolektivoNetworkStamps() public {}
-
+    /**
+     * @dev Returns the list of badges contracts created by this factory.
+     * @return Array of addresses of badges contracts.
+     */
     function getBadgesContracts() public view returns (address[] memory) {
         return badgesContracts;
     }
 
+    /**
+     * @dev Returns the list of stamps contracts created by this factory.
+     * @return Array of addresses of stamps contracts.
+     */
     function getStampsContracts() public view returns (address[] memory) {
         return stampsContracts;
     }
