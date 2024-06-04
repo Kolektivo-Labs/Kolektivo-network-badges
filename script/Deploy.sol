@@ -19,12 +19,15 @@ contract Deploy is Script {
         points[1] = 5 * DECIMALS;
         points[2] = 10 * DECIMALS;
         stamps = new KolektivoNetworkStamps(
-            address(this)
+            address(this),
+            "Kolektivo Network Stamps",
+            "KNS"
         );
         badges = new KolektivoNetworkBadges(
             address(this),
             stamps,
-            points
+            points,
+            "https://kolektivo.network/badges/{id}.json"
         );
 
         console.log("Stamps deployed at: ", address(stamps));

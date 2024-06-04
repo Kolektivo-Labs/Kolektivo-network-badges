@@ -19,8 +19,17 @@ contract KolektivoE2ETest is Test {
         points[1] = 5 * DECIMALS;
         points[2] = 10 * DECIMALS;
 
-        stamps = new KolektivoNetworkStamps(owner);
-        badges = new KolektivoNetworkBadges(owner, stamps, points);
+        stamps = new KolektivoNetworkStamps(
+            owner,
+            "Kolektivo Network Stamps",
+            "KNS"
+        );
+        badges = new KolektivoNetworkBadges(
+            owner,
+            stamps,
+            points,
+            "https://kolektivo.network/badges/{id}.json"
+        );
     }
 
     function testE2E() public {
@@ -91,6 +100,4 @@ contract KolektivoE2ETest is Test {
         vm.prank(user);
         stamps.approve(address(0x456), mintAmount);
     }
-
-   
 }

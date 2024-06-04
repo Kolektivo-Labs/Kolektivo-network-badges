@@ -8,8 +8,10 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract KolektivoNetworkStamps is ERC20, Ownable {
     error NonTransferrable();
     constructor(
-        address initialOwner
-    ) ERC20("KolektivoNetworkStamps", "KNS") Ownable(initialOwner) {}
+        address initialOwner,
+        string memory name,
+        string memory symbol
+    ) ERC20(name, symbol) Ownable(initialOwner) {}
 
     function mint(address to, uint256 amount) public onlyOwner {
         _mint(to, amount);
