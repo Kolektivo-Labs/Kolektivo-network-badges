@@ -16,14 +16,44 @@ contract KolektivoNetworkStamps is ERC20, Ownable {
     }
 
     /**
-     * @dev See {ERC20-_beforeTokenTransfer} - transfer of token is disabled
-     *
-     */
-    function _beforeTokenTransfer(
-        address from,
-        address to,
+     * @dev Being non transferrable, the Stamp token does not implement any of the
+     * standard ERC20 functions for transfer and allowance.
+     **/
+    function transfer(
+        address recipient,
         uint256 amount
-    ) internal pure override {
-        if (from != address(0)) revert NonTransferrable();
+    ) public virtual override returns (bool) {
+        recipient;
+        amount;
+        revert("TRANSFER_NOT_SUPPORTED");
+    }
+
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) public virtual override returns (bool) {
+        sender;
+        recipient;
+        amount;
+        revert("TRANSFER_NOT_SUPPORTED");
+    }
+
+    function allowance(
+        address owner,
+        address spender
+    ) public view virtual override returns (uint256) {
+        owner;
+        spender;
+        revert("ALLOWANCE_NOT_SUPPORTED");
+    }
+
+    function approve(
+        address spender,
+        uint256 amount
+    ) public virtual override returns (bool) {
+        spender;
+        amount;
+        revert("APPROVAL_NOT_SUPPORTED");
     }
 }
