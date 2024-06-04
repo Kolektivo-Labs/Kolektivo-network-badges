@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract KolektivoNetworkBadges is ERC1155, Ownable {
+    
     IERC20 private _kolektivoNetworkStamps;
     uint256 public maxBadgeLevel = 0;
     uint256[] public stampsPerTier;
