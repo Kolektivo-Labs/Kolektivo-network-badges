@@ -27,7 +27,9 @@ contract Deploy is Script {
             address(this),
             stamps,
             points,
-            "https://kolektivo.network/badges/{id}.json"
+            "https://kolektivo.network/badges/{id}.json",
+            "https://kolektivo.network/badges/"
+
         );
 
         console.log("Stamps deployed at: ", address(stamps));

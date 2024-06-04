@@ -16,7 +16,8 @@ contract KolektivoNetworkFactory is Ownable {
      * @param stampName Name of the stamp token.
      * @param stampSymbol Symbol of the stamp token.
      * @param initialStampsPerTier Initial supply of stamps per tier.
-     * @param uri Metadata URI for the badges.
+     * @param URI Metadata URI for the badges.
+     * @param baseURI Metadata baseURI for the badges.
      * @return stampsContract Address of the created stamps contract.
      * @return badgesContract Address of the created badges contract.
      */
@@ -24,7 +25,8 @@ contract KolektivoNetworkFactory is Ownable {
         string memory stampName,
         string memory stampSymbol,
         uint256[] calldata initialStampsPerTier,
-        string calldata uri
+        string calldata URI,
+        string calldata baseURI
     )
         public
         onlyOwner
@@ -39,7 +41,8 @@ contract KolektivoNetworkFactory is Ownable {
             msg.sender,
             stamps,
             initialStampsPerTier,
-            uri
+            URI,
+            baseURI
         );
         stampsContracts.push(address(stamps));
         badgesContracts.push(address(badges));

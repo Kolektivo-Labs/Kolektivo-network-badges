@@ -28,7 +28,8 @@ contract KolektivoE2ETest is Test {
             owner,
             stamps,
             points,
-            "https://kolektivo.network/badges/{id}.json"
+            "https://kolektivo.network/badges/{id}.json",
+            "https://kolektivo.network/badges"
         );
     }
 
@@ -99,5 +100,51 @@ contract KolektivoE2ETest is Test {
         vm.expectRevert("APPROVAL_NOT_SUPPORTED");
         vm.prank(user);
         stamps.approve(address(0x456), mintAmount);
+    }
+
+    function testURIs() public {
+        uint256 DECIMALS = 1e18;
+        uint256[] memory points = new uint256[](3);
+        points[0] = 1 * DECIMALS;
+        points[1] = 5 * DECIMALS;
+        points[2] = 10 * DECIMALS;
+
+        stamps = new KolektivoNetworkStamps(
+            owner,
+            "Kolektivo Network Stamps",
+            "KNS"
+        );
+        badges = new KolektivoNetworkBadges(
+            owner,
+            stamps,
+            points,
+            "https://kolektivo.network/badges/{id}.json",
+            "https://kolektivo.network/badges/"
+        );
+
+        // Mint initial stamps to the user
+        uint256 mintAmount = 20 * 1e18;
+        stamps.mint(user, mintAmount);
+
+        // Mint level 1 badge and check URI
+        vm.prank(user);
+        badges.mint(user, 1, 1, "");
+        string memory expectedURI1 = "https://kolektivo.network/badges/1.json";
+        string memory actualURI1 = badges.uri(1);
+        assertEq(actualURI1, expectedURI1);
+
+        // Mint level 2 badge and check URI
+        vm.prank(user);
+        badges.mint(user, 2, 1, "");
+        string memory expectedURI2 = "https://kolektivo.network/badges/2.json";
+        string memory actualURI2 = badges.uri(2);
+        assertEq(actualURI2, expectedURI2);
+
+        // Mint level 3 badge and check URI
+        vm.prank(user);
+        badges.mint(user, 3, 1, "");
+        string memory expectedURI3 = "https://kolektivo.network/badges/3.json";
+        string memory actualURI3 = badges.uri(3);
+        assertEq(actualURI3, expectedURI3);
     }
 }
