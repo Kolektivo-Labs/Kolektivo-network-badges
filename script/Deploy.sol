@@ -6,6 +6,9 @@ import {KolektivoNetworkBadges} from "../src/KolektivoNetworkBadges.sol";
 import {KolektivoNetworkStamps} from "../src/KolektivoNetworkStamps.sol";
 
 contract Deploy is Script {
+    KolektivoNetworkStamps public stamps;
+    KolektivoNetworkBadges public badges;
+
     function setUp() public {}
 
     function run() public {
@@ -15,10 +18,10 @@ contract Deploy is Script {
         points[0] = 1 * DECIMALS;
         points[1] = 5 * DECIMALS;
         points[2] = 10 * DECIMALS;
-        KolektivoNetworkStamps stamps = new KolektivoNetworkStamps(
+        stamps = new KolektivoNetworkStamps(
             address(this)
         );
-        KolektivoNetworkBadges badges = new KolektivoNetworkBadges(
+        badges = new KolektivoNetworkBadges(
             address(this),
             stamps,
             points

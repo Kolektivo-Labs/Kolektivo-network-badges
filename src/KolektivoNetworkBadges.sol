@@ -7,7 +7,6 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract KolektivoNetworkBadges is ERC1155, Ownable {
-    
     IERC20 private _kolektivoNetworkStamps;
     uint256 public maxBadgeLevel = 0;
     uint256[] public stampsPerTier;
@@ -19,8 +18,10 @@ contract KolektivoNetworkBadges is ERC1155, Ownable {
         address initialOwner,
         IERC20 kolektivoNetworkStamps,
         uint256[] memory initialStampsPerTier
-    ) ERC1155("") Ownable(initialOwner) {
-        _setURI("https://kolektivo.network/badges/{id}.json");
+    )
+        ERC1155("https://kolektivo.network/badges/{id}.json")
+        Ownable(initialOwner)
+    {
         _kolektivoNetworkStamps = kolektivoNetworkStamps;
         _setInitialStampsPerTier(initialStampsPerTier);
     }
