@@ -3,6 +3,7 @@
 This documentation provides detailed instructions on how to use and deploy the `KolektivoNetworkBadges` smart contract using Foundry.
 
 #### Prerequisites
+
 - Foundry installed
 - OpenZeppelin Contracts
 
@@ -41,10 +42,20 @@ To deploy the `KolektivoNetworkBadges` and `KolektivoNetworkStamps` contracts, f
        function setUp() public {}
 
        function run() public {
-           uint256 DECIMALS = 1e18;
-           vm.broadcast();
-           KolektivoNetworkStamps stamps = new KolektivoNetworkStamps(address(this));
-           KolektivoNetworkBadges badges = new KolektivoNetworkBadges(address(this), stamps, [1 * DECIMALS, 5 * DECIMALS, 10 * DECIMALS]);
+            uint256 DECIMALS = 1e18;
+            vm.broadcast();
+            uint256[] memory points = new uint256[](3);
+            points[0] = 1 * DECIMALS;
+            points[1] = 5 * DECIMALS;
+            points[2] = 10 * DECIMALS;
+            KolektivoNetworkStamps stamps = new KolektivoNetworkStamps(
+                address(this)
+            );
+            KolektivoNetworkBadges badges = new KolektivoNetworkBadges(
+                address(this),
+                stamps,
+                points
+            );
 
            console.log("Stamps deployed at: ", address(stamps));
            console.log("Badges deployed at: ", address(badges));
@@ -89,7 +100,7 @@ To deploy the `KolektivoNetworkBadges` and `KolektivoNetworkStamps` contracts, f
   Deploy the contract with the initial owner, the address of the Kolektivo Network Points contract, and an array of initial points required for each tier.
 
 - **setURI(string memory newuri):**
-  
+
   Sets the base URI for all token types.
 
   ```solidity
@@ -198,8 +209,18 @@ contract Deploy is Script {
     function run() public {
         uint256 DECIMALS = 1e18;
         vm.broadcast();
-        KolektivoNetworkStamps stamps = new KolektivoNetworkStamps(address(this));
-        KolektivoNetworkBadges badges = new KolektivoNetworkBadges(address(this), stamps, [1 * DECIMALS, 5 * DECIMALS, 10 * DECIMALS]);
+        uint256[] memory points = new uint256[](3);
+        points[0] = 1 * DECIMALS;
+        points[1] = 5 * DECIMALS;
+        points[2] = 10 * DECIMALS;
+        KolektivoNetworkStamps stamps = new KolektivoNetworkStamps(
+            address(this)
+        );
+        KolektivoNetworkBadges badges = new KolektivoNetworkBadges(
+            address(this),
+            stamps,
+            points
+        );
 
         console.log("Stamps deployed at: ", address(stamps));
         console.log("Badges deployed at: ", address(badges));
@@ -208,6 +229,7 @@ contract Deploy is Script {
 ```
 
 1. **Setup Function:**
+
    - Initializes any required setup. Currently, it is empty.
 
 2. **Run Function:**

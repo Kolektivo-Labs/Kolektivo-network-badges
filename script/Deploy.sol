@@ -11,8 +11,18 @@ contract Deploy is Script {
     function run() public {
         uint256 DECIMALS = 1e18;
         vm.broadcast();
-        KolektivoNetworkStamps stamps = new KolektivoNetworkStamps(address(this));
-        KolektivoNetworkBadges badges = new KolektivoNetworkBadges(address(this), stamps, [1 * DECIMALS, 5 * DECIMALS, 10 * DECIMALS]);
+        uint256[] memory points = new uint256[](3);
+        points[0] = 1 * DECIMALS;
+        points[1] = 5 * DECIMALS;
+        points[2] = 10 * DECIMALS;
+        KolektivoNetworkStamps stamps = new KolektivoNetworkStamps(
+            address(this)
+        );
+        KolektivoNetworkBadges badges = new KolektivoNetworkBadges(
+            address(this),
+            stamps,
+            points
+        );
 
         console.log("Stamps deployed at: ", address(stamps));
         console.log("Badges deployed at: ", address(badges));
