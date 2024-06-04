@@ -63,6 +63,7 @@ To deploy the `KolektivoNetworkBadges` and `KolektivoNetworkStamps` contracts, f
    }
    ```
 
+
 3. **Compile the Contracts:**
 
    Compile the contracts using Foundry:
@@ -78,6 +79,26 @@ To deploy the `KolektivoNetworkBadges` and `KolektivoNetworkStamps` contracts, f
    ```bash
    forge script script/Deploy.sol --rpc-url <YOUR_RPC_URL> --private-key <YOUR_PRIVATE_KEY> --broadcast
    ```
+
+
+
+#### Factory Contract:
+
+   - The `KolektivoNetworkFactory` contract is responsible for deploying `KolektivoNetworkBadges` and `KolektivoNetworkStamps` contracts.
+   - It stores the addresses of the deployed contracts for later retrieval.
+   - The `createKolektivoNetworkBadges` function deploys a new `KolektivoNetworkBadges` contract and stores its address along with the address of the associated ERC20 contract.
+   - The `createKolektivoNetworkStamps` function deploys a new `KolektivoNetworkStamps` contract and stores its address.
+   - The `getBadgesContracts` and `getStampsContracts` functions return the addresses of the deployed `KolektivoNetworkBadges` and `KolektivoNetworkStamps` contracts respectively.
+
+1. **Setup Function:**
+
+   - Initializes any required setup. Currently, it is empty.
+
+2. **Run Function:**
+   - Deploys the `KolektivoNetworkStamps` contract.
+   - Deploys the `KolektivoNetworkBadges` contract with the address of the `KolektivoNetworkStamps` contract and the initial points required for each badge level.
+   - Logs the deployed contract addresses.
+
 
 ### Contract Functions
 
