@@ -130,16 +130,14 @@ To deploy the `KolektivoNetworkBadges` and `KolektivoNetworkStamps` contracts, f
   }
   ```
 
-- **mint(address account, uint256 id, uint256 amount, bytes memory data):**
+- **mint(address account, uint256 id):**
 
-  Mints a new badge token for the specified account, mind the id is the level you want to mint.
+  Mints a new badge token for the specified account, mind the id is the level you want to mint (starts on 1, SO IMPORTANT).
 
   ```solidity
   function mint(
       address account,
-      uint256 id,
-      uint256 amount,
-      bytes memory data
+      uint256 id
   ) public {
       require(id > 0 && id <= maxBadgeLevel, "Invalid badge level");
       require(
@@ -151,7 +149,7 @@ To deploy the `KolektivoNetworkBadges` and `KolektivoNetworkStamps` contracts, f
           "Levels must be minted sequentially"
       );
 
-      _mint(account, id, amount, data);
+      _mint(account, id, 1, "");
       _lastMintedLevel[account] = id;
   }
   ```

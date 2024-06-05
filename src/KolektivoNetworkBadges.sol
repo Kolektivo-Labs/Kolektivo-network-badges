@@ -13,7 +13,7 @@ contract KolektivoNetworkBadges is ERC1155URIStorage, Ownable {
     uint256[] public stampsPerTier;
 
     // Mapping to track the highest level minted by each user
-    mapping(address => uint256) private _lastMintedLevel;
+    mapping(address => uint256) public _lastMintedLevel;
 
     constructor(
         address initialOwner,
@@ -27,12 +27,7 @@ contract KolektivoNetworkBadges is ERC1155URIStorage, Ownable {
         _setBaseURI(baseURI);
     }
 
-    function mint(
-        address account,
-        uint256 id,
-        uint256 amount,
-        bytes memory data
-    ) public {
+    function mint(address account, uint256 id) public {
         require(id > 0 && id <= maxBadgeLevel, "Invalid badge level");
         require(
             _kolektivoNetworkStamps.balanceOf(account) >= stampsPerTier[id - 1],
@@ -42,7 +37,7 @@ contract KolektivoNetworkBadges is ERC1155URIStorage, Ownable {
             _lastMintedLevel[account] + 1 == id,
             "Levels must be minted sequentially"
         );
-        _mint(account, id, amount, data);
+        _mint(account, id, 1, "");
         _lastMintedLevel[account] = id;
     }
 

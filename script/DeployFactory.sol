@@ -11,7 +11,7 @@ contract DeployFactory is Script {
 
     function run() public {
         vm.broadcast();
-        factory = new KolektivoNetworkFactory(address(this));
+        factory = new KolektivoNetworkFactory(msg.sender);
         console.log("Factory deployed at: ", address(factory));
     }
 }
