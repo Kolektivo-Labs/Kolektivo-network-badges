@@ -13,7 +13,7 @@ contract CreateBadge is Script {
         uint256 DECIMALS = 1e18;
 
         vm.broadcast();
-        factory = KolektivoNetworkFactory(0x2f1323CC313838D4402169A5530477f04BAaDb25);
+        factory = KolektivoNetworkFactory(0x2Cc6fBbcBcD8996ce6cAaFa09fD1c9F410CB248b);
         console.log("Factory at: ", address(factory));
         uint256[] memory points = new uint256[](3);
         points[0] = 1 * DECIMALS;

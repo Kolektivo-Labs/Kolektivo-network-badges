@@ -4,8 +4,9 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import {IKolektivoNetworkStamps} from './interfaces/IKolektivoNetworkStamps.sol';
 
-contract KolektivoNetworkStamps is ERC20, Ownable {
+contract KolektivoNetworkStamps is ERC20, Ownable, IKolektivoNetworkStamps {
     // error NonTransferrable();
     constructor(
         address initialOwner,
@@ -15,47 +16,26 @@ contract KolektivoNetworkStamps is ERC20, Ownable {
 
     function mint(address to, uint256 amount) public onlyOwner {
         _mint(to, amount);
+  emit TokensMinted(to, amount);
     }
+        /**
+     * @notice Internal function to update token balances
+     * @param from The address transferring the tokens
+     * @param to The address receiving the tokens
+     * @param value The list of token amounts
+         */
+    function _update(
+        address from,
+        address to,
+        uint256 value
+    ) internal override(ERC20) {
+        // Ensure that the transfer is either minting, burning
+        require(
+            from == address(0) ||
+                to == address(0), 
+            "TRANSFER_NOT_SUPPORTED"
+        );
 
-    // /**
-    //  * @dev Being non transferrable, the Stamp token does not implement any of the
-    //  * standard ERC20 functions for transfer and allowance.
-    //  **/
-    // function transfer(
-    //     address recipient,
-    //     uint256 amount
-    // ) public virtual override returns (bool) {
-    //     recipient;
-    //     amount;
-    //     revert("TRANSFER_NOT_SUPPORTED");
-    // }
-
-    // function transferFrom(
-    //     address sender,
-    //     address recipient,
-    //     uint256 amount
-    // ) public virtual override returns (bool) {
-    //     sender;
-    //     recipient;
-    //     amount;
-    //     revert("TRANSFER_NOT_SUPPORTED");
-    // }
-
-    // function allowance(
-    //     address owner,
-    //     address spender
-    // ) public view virtual override returns (uint256) {
-    //     owner;
-    //     spender;
-    //     revert("ALLOWANCE_NOT_SUPPORTED");
-    // }
-
-    // function approve(
-    //     address spender,
-    //     uint256 amount
-    // ) public virtual override returns (bool) {
-    //     spender;
-    //     amount;
-    //     revert("APPROVAL_NOT_SUPPORTED");
-    // }
+        super._update(from, to,  value);
+    }
 }

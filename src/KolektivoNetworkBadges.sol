@@ -6,8 +6,9 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol";
+import {IKolektivoNetworkBadges} from './interfaces/IKolektivoNetworkBadges.sol';
 
-contract KolektivoNetworkBadges is ERC1155URIStorage, Ownable {
+contract KolektivoNetworkBadges is ERC1155URIStorage, Ownable, IKolektivoNetworkBadges {
     IERC20 private _kolektivoNetworkStamps;
     uint256 public maxBadgeLevel = 0;
     uint256[] public stampsPerTier;
@@ -39,6 +40,7 @@ contract KolektivoNetworkBadges is ERC1155URIStorage, Ownable {
         );
         _mint(account, id, 1, "");
         _lastMintedLevel[account] = id;
+emit BadgeMinted(account, id);
     }
 
     function setStampsRequired(
@@ -69,9 +71,12 @@ contract KolektivoNetworkBadges is ERC1155URIStorage, Ownable {
                 string(abi.encodePacked(_toPaddedHexString(level), ".json"))
             );
             maxBadgeLevel = level;
+
         } else {
             stampsPerTier[level - 1] = stamps;
         }
+
+emit StampsUpdated(level, stamps);
     }
 
     function getStampsRequired(uint256 level) external view returns (uint256) {
@@ -113,4 +118,27 @@ contract KolektivoNetworkBadges is ERC1155URIStorage, Ownable {
         }
         return string(buffer);
     }
-}
+        /**
+     * @notice Internal function to update token balances
+     * @param from The address transferring the tokens
+     * @param to The address receiving the tokens
+     * @param ids The list of token IDs
+     * @param values The list of token amounts
+     */
+    function _update(
+        address from,
+        address to,
+        uint256[] memory ids,
+        uint256[] memory values
+    ) internal override(ERC1155) {
+        // Ensure that the transfer is either minting, burning
+        require(
+            from == address(0) ||
+                to == address(0), 
+            "TRANSFER_NOT_SUPPORTED"
+        );
+
+        super._update(from, to, ids, values);
+    }
+
+    }

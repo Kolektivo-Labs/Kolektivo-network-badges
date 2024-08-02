@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: UNLICENDEC
 pragma solidity ^0.8.13;
 
 import {Test} from "forge-std/Test.sol";
@@ -41,26 +41,26 @@ contract KolektivoE2ETest is Test {
 
         // User mints level 1 badge
         vm.prank(user);
-        badges.mint(user, 1, 1, "");
+        badges.mint(user, 1);
         assertEq(badges.balanceOf(user, 1), 1);
         assertEq(badges.getLastMintedLevel(user), 1);
 
         // User mints level 2 badge
         vm.prank(user);
-        badges.mint(user, 2, 1, "");
+        badges.mint(user, 2);
         assertEq(badges.balanceOf(user, 2), 1);
         assertEq(badges.getLastMintedLevel(user), 2);
 
         // User mints level 3 badge
         vm.prank(user);
-        badges.mint(user, 3, 1, "");
+        badges.mint(user, 3);
         assertEq(badges.balanceOf(user, 3), 1);
         assertEq(badges.getLastMintedLevel(user), 3);
 
         // Ensure user cannot mint level 4 as it doesn't exist yet
         vm.expectRevert("Invalid badge level");
         vm.prank(user);
-        badges.mint(user, 4, 1, "");
+        badges.mint(user, 4);
     }
 
     function testMintWithoutEnoughPoints() public {
@@ -69,7 +69,7 @@ contract KolektivoE2ETest is Test {
         stamps.mint(user, insufficientStamps);
         vm.expectRevert("Insufficient stamps for this badge level");
         vm.prank(user);
-        badges.mint(user, 1, 1, "");
+        badges.mint(user, 1);
     }
 
     function testMintOutOfOrder() public {
@@ -79,7 +79,7 @@ contract KolektivoE2ETest is Test {
         // Attempt to mint level 2 without minting level 1 should fail
         vm.expectRevert("Levels must be minted sequentially");
         vm.prank(user);
-        badges.mint(user, 2, 1, "");
+        badges.mint(user, 2);
     }
 
     function testNonTransferrableStamps() public {
@@ -90,16 +90,14 @@ contract KolektivoE2ETest is Test {
         vm.prank(user);
         stamps.transfer(address(0x456), mintAmount);
 
-        vm.expectRevert("TRANSFER_NOT_SUPPORTED");
         vm.prank(user);
+        stamps.approve( address(0x456), mintAmount);
+        vm.expectRevert("TRANSFER_NOT_SUPPORTED");
+        vm.prank( address(0x456));
         stamps.transferFrom(user, address(0x456), mintAmount);
 
-        vm.expectRevert("ALLOWANCE_NOT_SUPPORTED");
-        stamps.allowance(user, address(0x456));
 
-        vm.expectRevert("APPROVAL_NOT_SUPPORTED");
-        vm.prank(user);
-        stamps.approve(address(0x456), mintAmount);
+
     }
 
     function testURIs() public {
@@ -128,21 +126,21 @@ contract KolektivoE2ETest is Test {
 
         // Mint level 1 badge and check URI
         vm.prank(user);
-        badges.mint(user, 1, 1, "");
+        badges.mint(user, 1);
         string memory expectedURI1 = "https://kolektivo.network/badges/0000000000000000000000000000000000000000000000000000000000000001.json";
         string memory actualURI1 = badges.uri(1);
         assertEq(actualURI1, expectedURI1);
 
         // Mint level 2 badge and check URI
         vm.prank(user);
-        badges.mint(user, 2, 1, "");
+        badges.mint(user, 2);
         string memory expectedURI2 = "https://kolektivo.network/badges/0000000000000000000000000000000000000000000000000000000000000002.json";
         string memory actualURI2 = badges.uri(2);
         assertEq(actualURI2, expectedURI2);
 
         // Mint level 3 badge and check URI
         vm.prank(user);
-        badges.mint(user, 3, 1, "");
+        badges.mint(user, 3);
         string memory expectedURI3 = "https://kolektivo.network/badges/0000000000000000000000000000000000000000000000000000000000000003.json";
         string memory actualURI3 = badges.uri(3);
         assertEq(actualURI3, expectedURI3);
