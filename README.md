@@ -1,4 +1,4 @@
-### KolektivoNetworkBadges Smart Contract Documentation
+### Kolektivo Network Badges Smart Contract Documentation
 
 This documentation provides detailed instructions on how to use and deploy the `KolektivoNetworkBadges` smart contract using Foundry.
 
