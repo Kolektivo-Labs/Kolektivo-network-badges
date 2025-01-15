@@ -464,6 +464,161 @@ The new badge campaign will be created, and the transaction logs will show the r
 
 ---
 
+### Metadata Guide for Kolektivo Network Badges
+
+This section provides a guide to creating and managing metadata for Kolektivo Network badges. The metadata follows the ERC1155 JSON metadata standard and can be customized for various tiers or properties.
+
+---
+
+### Metadata Structure
+
+The metadata for each badge should be formatted as a JSON file and hosted on a decentralized storage solution such as IPFS. Below is a sample template:
+
+```json
+{
+  "name": "Plastic Recovery Badge",
+  "description": "This is a collection from Kolektivo Network",
+  "image": "https://ipfs.io/ipfs/Qmf5ggYN4G82oqKHg3UkTWeNskZ66PieS92Zj1oVihVDop/Beginner.png",
+  "properties": {
+    "tier": "beginner"
+  }
+}
+```
+
+---
+
+### Tiers and Custom Properties
+
+The metadata supports the following predefined tiers:
+- **beginner**
+- **advance**
+- **master**
+
+You can also define custom tiers or additional properties based on your campaign's requirements.
+
+---
+
+### Creating Metadata Files
+
+1. **Decide on Badge Tiers**:  
+   For example:
+   - Beginner Badge
+   - Advanced Badge
+   - Master Badge
+
+2. **Prepare JSON Files**:  
+   Create a separate JSON file for each badge tier. Below are examples for each tier:
+
+   #### Beginner Badge (`1.json`):
+   ```json
+   {
+     "name": "Plastic Recovery Badge - Beginner",
+     "description": "This badge recognizes participation at the beginner level in the Plastic Recovery campaign.",
+     "image": "https://ipfs.io/ipfs/Qmf5ggYN4G82oqKHg3UkTWeNskZ66PieS92Zj1oVihVDop/Beginner.png",
+     "properties": {
+       "tier": "beginner"
+     }
+   }
+   ```
+
+   #### Advanced Badge (`2.json`):
+   ```json
+   {
+     "name": "Plastic Recovery Badge - Advanced",
+     "description": "This badge recognizes participation at the advanced level in the Plastic Recovery campaign.",
+     "image": "https://ipfs.io/ipfs/Qmf5ggYN4G82oqKHg3UkTWeNskZ66PieS92Zj1oVihVDop/Advanced.png",
+     "properties": {
+       "tier": "advance"
+     }
+   }
+   ```
+
+   #### Master Badge (`3.json`):
+   ```json
+   {
+     "name": "Plastic Recovery Badge - Master",
+     "description": "This badge recognizes outstanding participation at the master level in the Plastic Recovery campaign.",
+     "image": "https://ipfs.io/ipfs/Qmf5ggYN4G82oqKHg3UkTWeNskZ66PieS92Zj1oVihVDop/Master.png",
+     "properties": {
+       "tier": "master"
+     }
+   }
+   ```
+
+---
+
+### Hosting Metadata
+
+1. **Upload to IPFS**:  
+   Use a service like [Pinata](https://www.pinata.cloud/) or [NFT.Storage](https://nft.storage/) to upload your metadata files and images to IPFS.
+
+   Example:
+   - `1.json` → `ipfs://<CID>/1.json`
+   - `2.json` → `ipfs://<CID>/2.json`
+   - `3.json` → `ipfs://<CID>/3.json`
+
+2. **Set the Base URI**:  
+   Use the base URI of the metadata (e.g., `ipfs://<CID>/`) in your deployment script or directly in the contract.
+
+---
+
+### Using Metadata in the Contract
+
+When creating a badge campaign via the factory, provide the base URI where the metadata is stored. For example:
+
+```solidity
+factory.createKolektivoNetworkCampaign(
+    "PlasticRecoveryStamp",
+    "PRS",
+    points,
+    "ipfs://<CID>/{id}.json", // Metadata base URI
+    "ipfs://<CID>/"          // Base URI
+);
+```
+
+- Replace `<CID>` with the actual IPFS CID of your metadata folder.
+- The `{id}.json` placeholder will dynamically fetch metadata for each badge level.
+
+---
+
+### Adding Custom Tiers
+
+If you need additional tiers, simply:
+1. Create a new JSON file for the tier.
+2. Add the tier name and properties in the `properties` section.
+3. Upload the new metadata file to IPFS.
+4. Include the new tier’s metadata in your badge campaign.
+
+---
+
+### Example Metadata Folder on IPFS
+
+```
+/<IPFS_CID>/
+├── 1.json  (Beginner Badge)
+├── 2.json  (Advanced Badge)
+└── 3.json  (Master Badge)
+```
+
+---
+
+### Testing and Verification
+
+1. Retrieve metadata using a tool like [IPFS Gateway](https://ipfs.io) or a library like `axios` in your application:
+   ```bash
+   curl https://ipfs.io/ipfs/<CID>/1.json
+   ```
+   This should return the JSON metadata for the beginner badge.
+
+2. Test the metadata integration in the contract by querying a minted badge’s metadata URI:
+   ```solidity
+   string memory uri = badgeContract.uri(1); // Should return: ipfs://<CID>/1.json
+   ```
+
+---
+
+By following this guide, you can create, host, and manage metadata for Kolektivo Network badges, ensuring a seamless and decentralized user experience.
+
 ## Conclusion
 
 This updated documentation provides a comprehensive guide on using the **KolektivoNetworkStamps**, **KolektivoNetworkBadges**, and **KolektivoNetworkFactory** contracts, along with deployment steps using Foundry.
